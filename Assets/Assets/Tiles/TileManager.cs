@@ -6,11 +6,15 @@ public class TileManager : MonoBehaviour
     public GameObject tilePrefab;
     public GameObject roadblockPrefab;
     public GameObject collectiblePrefab;
+    public GameObject shootingPowerUpPrefab;
+    public GameObject speedBoostPowerUpPrefab;
     public int tilesAhead = 5; // Number of tiles to load ahead of the player
     public int tilesBehind = 2; // Number of tiles to keep active behind the player
     public float tileWidth = 80f; // Width of each tile
     public float roadblockChance = 0.2f; // Chance to spawn a roadblock on a tile
     public float collectibleChance = 0.1f; // Chance to spawn a collectible on a tile
+    public float SpeedBoostChance = 0.01f;
+    public float ShootingChance = 0.01f;
     public float minY = 0f; // Minimum height for roadblocks and collectibles
     public float maxY = 20f; // Maximum height for roadblocks and collectibles
     public float minDistanceBetween = 2f; // Minimum vertical distance between roadblocks and collectibles
@@ -113,6 +117,44 @@ public class TileManager : MonoBehaviour
             {
                 Vector3 collectiblePosition = new Vector3(tile.transform.position.x, collectibleY, 0);
                 Instantiate(collectiblePrefab, collectiblePosition, Quaternion.identity, tile.transform);
+            }
+        }
+        if (Random.value < SpeedBoostChance)
+        {
+            bool validPosition = false;
+
+            while (!validPosition)
+            {
+                collectibleY = Random.Range(minY, maxY);
+                if (Mathf.Abs(collectibleY - roadblockY) >= minDistanceBetween || roadblockY == float.MinValue)
+                {
+                    validPosition = true;
+                }
+            }
+
+            if (validPosition)
+            {
+                Vector3 collectiblePosition = new Vector3(tile.transform.position.x, collectibleY, 0);
+                Instantiate(speedBoostPowerUpPrefab, collectiblePosition, Quaternion.identity, tile.transform);
+            }
+        }
+        if (Random.value < ShootingChance)
+        {
+            bool validPosition = false;
+
+            while (!validPosition)
+            {
+                collectibleY = Random.Range(minY, maxY);
+                if (Mathf.Abs(collectibleY - roadblockY) >= minDistanceBetween || roadblockY == float.MinValue)
+                {
+                    validPosition = true;
+                }
+            }
+
+            if (validPosition)
+            {
+                Vector3 collectiblePosition = new Vector3(tile.transform.position.x, collectibleY, 0);
+                Instantiate(shootingPowerUpPrefab, collectiblePosition, Quaternion.identity, tile.transform);
             }
         }
     }
