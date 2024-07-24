@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     public float shootDuration = 5f; 
     public float speedBoostDuration = 5f; 
     public float speedBoostMultiplier = 2f;
+    [SerializeField]private ParticleSystem speedBoostParticles;
     
 
     private Rigidbody rb;
@@ -57,13 +58,12 @@ public class PlayerMovement : MonoBehaviour
 
             if (other.gameObject.name.Contains("ShootingPowerUp"))
             {
-                Debug.Log("Shooting Powerup Collected");
                 StartCoroutine(ShootCoroutine());
             }
             else if (other.gameObject.name.Contains("SpeedBoostPowerUp"))
             {
-                Debug.Log("Speed Boost Powerup Collected");
                 StartCoroutine(SpeedBoostCoroutine());
+                speedBoostParticles.Play();
             }
 
             Destroy(other.gameObject);
@@ -89,7 +89,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isShooting)
         {
-            Debug.Log("Shooting");
             Vector3 spawnPosition = transform.position + new Vector3(1, 0, 0);
             Instantiate(bulletPrefab, spawnPosition, Quaternion.identity);
         }
@@ -104,7 +103,6 @@ public class PlayerMovement : MonoBehaviour
 
         while (elapsed < speedBoostDuration)
         {
-            Debug.Log("Speed Boost Active");
             elapsed += Time.deltaTime;
             yield return null;
         }

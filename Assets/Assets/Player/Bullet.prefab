@@ -112,8 +112,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7bc0aebdabeecf46b4b4256340e9c3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shootRoadblockScoreValue: 5
   speed: 20
   lifetime: 2
+  shootRoadblockParticle: {fileID: 6146545414153545492, guid: 61753401622c2a947a30e2147430e97d, type: 3}
 --- !u!54 &4325800924956001916
 Rigidbody:
   m_ObjectHideFlags: 0

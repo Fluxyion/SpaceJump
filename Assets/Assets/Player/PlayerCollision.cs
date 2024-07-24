@@ -4,10 +4,13 @@ using UnityEngine.SceneManagement;
 
 public class PlayerCollision : MonoBehaviour
 {
+    public int destroyRoadblockScoreValue = 5;
     public int collectibleScoreValue = 10;
     private ScoreManager scoreManager;
     [SerializeField]private ParticleSystem crashParticle;
+    [SerializeField] private ParticleSystem DestroyRoadblockCrashParticle;
     private PlayerMovement _playerMovement;
+    
 
     private void Start()
     {
@@ -21,7 +24,9 @@ public class PlayerCollision : MonoBehaviour
         {
             if (_playerMovement.isSpeedBoosted)
             {
+                DestroyRoadblockCrashParticle.Play();
                 Destroy(collision.gameObject);
+                scoreManager.AddScore(destroyRoadblockScoreValue);
             }
             else
             {
