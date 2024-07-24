@@ -7,17 +7,27 @@ public class PlayerCollision : MonoBehaviour
     public int collectibleScoreValue = 10;
     private ScoreManager scoreManager;
     [SerializeField]private ParticleSystem crashParticle;
+    private PlayerMovement _playerMovement;
 
     private void Start()
     {
         scoreManager = FindObjectOfType<ScoreManager>();
+        _playerMovement = GetComponent<PlayerMovement>();
     }
 
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Roadblock"))
         {
-            StartShipCrashSequence();
+            if (_playerMovement.isSpeedBoosted)
+            {
+                Destroy(collision.gameObject);
+            }
+            else
+            {
+                StartShipCrashSequence(); 
+            }
+            
             
             
             

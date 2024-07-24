@@ -13,12 +13,14 @@ public class PlayerMovement : MonoBehaviour
     public GameObject bulletPrefab;
     public float shootDuration = 5f; 
     public float speedBoostDuration = 5f; 
-    public float speedBoostMultiplier = 2f; 
+    public float speedBoostMultiplier = 2f;
+    
 
     private Rigidbody rb;
-    private bool isShooting = false;
-    private bool isSpeedBoosted = false;
+    public bool isShooting = false;
+    public bool isSpeedBoosted = false;
     private float originalSpeed;
+    
 
     void Start()
     {
@@ -96,6 +98,7 @@ public class PlayerMovement : MonoBehaviour
     IEnumerator SpeedBoostCoroutine()
     {
         isSpeedBoosted = true;
+        originalSpeed = forwardSpeed;
         forwardSpeed *= speedBoostMultiplier;
         float elapsed = 0f;
 
@@ -109,13 +112,5 @@ public class PlayerMovement : MonoBehaviour
         forwardSpeed = originalSpeed;
         isSpeedBoosted = false;
     }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (isSpeedBoosted && collision.gameObject.CompareTag("Obstacle"))
-        {
-            Debug.Log("Destroyed Obstacle");
-            Destroy(collision.gameObject);
-        }
-    }
+    
 }

@@ -217,7 +217,7 @@ RectTransform:
   m_Children:
   - {fileID: 802444370}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -639,7 +639,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2069682267 stripped
 Transform:
@@ -704,6 +704,14 @@ PrefabInstance:
     - target: {fileID: 6588723180961584531, guid: e5d35c27b6b17c64b8c1c1cb5b88c06f, type: 3}
       propertyPath: minHeight
       value: -4.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6588723180961584531, guid: e5d35c27b6b17c64b8c1c1cb5b88c06f, type: 3}
+      propertyPath: shootDuration
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6588723180961584531, guid: e5d35c27b6b17c64b8c1c1cb5b88c06f, type: 3}
+      propertyPath: speedBoostDuration
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e5d35c27b6b17c64b8c1c1cb5b88c06f, type: 3}

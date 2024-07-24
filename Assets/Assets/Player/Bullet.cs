@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float speed = 10f;
+    public float speed = 20f;
     public float lifetime = 2f;
 
     void Start()
@@ -15,9 +15,9 @@ public class Bullet : MonoBehaviour
         transform.Translate(Vector3.right * speed * Time.deltaTime);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
-        if (other.CompareTag("Obstacle"))
+        if (other.gameObject.CompareTag("Roadblock"))
         {
             Destroy(other.gameObject);
             Destroy(gameObject);
