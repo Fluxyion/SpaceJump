@@ -17,24 +17,13 @@ public class PlayerCollision : MonoBehaviour
         scoreManager = FindObjectOfType<ScoreManager>();
         _playerMovement = GetComponent<PlayerMovement>();
     }
-
+ 
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Roadblock"))
         {
-            if (_playerMovement.isSpeedBoosted)
-            {
-                DestroyRoadblockCrashParticle.Play();
-                Destroy(collision.gameObject);
-                scoreManager.AddScore(destroyRoadblockScoreValue);
-            }
-            else
-            {
+            
                 StartShipCrashSequence(); 
-            }
-            
-            
-            
             
         }
         
@@ -46,6 +35,14 @@ public class PlayerCollision : MonoBehaviour
         {
             scoreManager.AddScore(collectibleScoreValue);
             Destroy(collision.gameObject);
+        }
+
+        if (collision.gameObject.CompareTag("Roadblock"))
+        { 
+            DestroyRoadblockCrashParticle.Play();
+            Destroy(collision.gameObject);
+            scoreManager.AddScore(destroyRoadblockScoreValue);
+            
         }
     }
 

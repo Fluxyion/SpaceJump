@@ -37,11 +37,6 @@ public class ScoreManager : MonoBehaviour
             UpdateScoreUI();
         }
     }
-    private void Update()
-    {
-        
-    }
-
     public void AddScore(int points)
     {
         score += points;

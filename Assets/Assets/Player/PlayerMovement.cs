@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     public float speedBoostDuration = 5f; 
     public float speedBoostMultiplier = 2f;
     [SerializeField]private ParticleSystem speedBoostParticles;
+    private MeshCollider shipCollider;
     
 
     private Rigidbody rb;
@@ -27,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         originalSpeed = forwardSpeed;
+        shipCollider = GetComponent<MeshCollider>();
     }
 
     void Update()
@@ -98,6 +100,7 @@ public class PlayerMovement : MonoBehaviour
     {
         isSpeedBoosted = true;
         originalSpeed = forwardSpeed;
+        shipCollider.isTrigger = true;
         forwardSpeed *= speedBoostMultiplier;
         float elapsed = 0f;
 
@@ -109,6 +112,7 @@ public class PlayerMovement : MonoBehaviour
 
         forwardSpeed = originalSpeed;
         isSpeedBoosted = false;
+        shipCollider.isTrigger = false;
     }
     
 }
