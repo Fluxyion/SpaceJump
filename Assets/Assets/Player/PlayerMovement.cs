@@ -28,7 +28,6 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-       
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
@@ -42,33 +41,33 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         forwardSpeed = Mathf.Min(forwardSpeed + acceleration * Time.fixedDeltaTime, maxForwardSpeed);
-        
         rb.velocity = new Vector3(forwardSpeed, rb.velocity.y, rb.velocity.z);
-        
         Vector3 clampedPosition = transform.position;
         clampedPosition.y = Mathf.Clamp(clampedPosition.y, minHeight, maxHeight);
         transform.position = clampedPosition;
     }
-    
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Collectible"))
         {
-            if (other.gameObject.name.Contains("ShootingPowerup"))
+            Debug.Log("Collected: " + other.gameObject.name);
+
+            if (other.gameObject.name.Contains("ShootingPowerUp"))
             {
+                Debug.Log("Shooting Powerup Collected");
                 StartCoroutine(ShootCoroutine());
             }
-            else if (other.gameObject.name.Contains("SpeedBoostPowerup"))
+            else if (other.gameObject.name.Contains("SpeedBoostPowerUp"))
             {
+                Debug.Log("Speed Boost Powerup Collected");
                 StartCoroutine(SpeedBoostCoroutine());
             }
 
-            Destroy(other.gameObject); 
+            Destroy(other.gameObject);
         }
     }
-    
-    
-    
+
     IEnumerator ShootCoroutine()
     {
         isShooting = true;
@@ -83,14 +82,17 @@ public class PlayerMovement : MonoBehaviour
 
         isShooting = false;
     }
+
     void Shoot()
     {
         if (isShooting)
         {
+            Debug.Log("Shooting");
             Vector3 spawnPosition = transform.position + new Vector3(1, 0, 0);
             Instantiate(bulletPrefab, spawnPosition, Quaternion.identity);
         }
     }
+
     IEnumerator SpeedBoostCoroutine()
     {
         isSpeedBoosted = true;
@@ -99,7 +101,7 @@ public class PlayerMovement : MonoBehaviour
 
         while (elapsed < speedBoostDuration)
         {
-            // Make the player invincible and destroy obstacles on collision
+            Debug.Log("Speed Boost Active");
             elapsed += Time.deltaTime;
             yield return null;
         }
@@ -112,8 +114,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isSpeedBoosted && collision.gameObject.CompareTag("Obstacle"))
         {
+            Debug.Log("Destroyed Obstacle");
             Destroy(collision.gameObject);
         }
     }
-    
 }
