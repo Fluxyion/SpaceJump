@@ -11,8 +11,8 @@ public class PlayerMovement : MonoBehaviour
     public float maxHeight = 25f; 
     public float minHeight = -3f; 
     public GameObject bulletPrefab;
-    public float shootDuration = 5f; 
-    public float speedBoostDuration = 5f; 
+    public float shootDuration = 8f; 
+    public float speedBoostDuration = 15f; 
     public int speedBoostMultiplier = 2;
     [SerializeField]private ParticleSystem speedBoostParticles;
     private MeshCollider shipCollider;
@@ -38,8 +38,8 @@ public class PlayerMovement : MonoBehaviour
         _buffDurationUI = FindObjectOfType<BuffDurationUI>();
         
         currentMultiplier = 1;
-        _buffDurationUI.SetShootingBuffDuration(shootDuration);
         _buffDurationUI.SetSpeedBoostDuration(speedBoostDuration);
+        _buffDurationUI.SetShootingBuffDuration(shootDuration);
     }
 
     void Update()
@@ -76,11 +76,13 @@ public class PlayerMovement : MonoBehaviour
             if (other.gameObject.name.Contains("ShootingPowerUp"))
             {
                 StartCoroutine(ShootCoroutine());
+                _buffDurationUI.ShootingCoundown(shootDuration);
             }
             else if (other.gameObject.name.Contains("SpeedBoostPowerUp"))
             {
                 StartCoroutine(SpeedBoostCoroutine());
                 speedBoostParticles.Play();
+                _buffDurationUI.SpeedBoostCoundown(speedBoostDuration);
             }
             else if (other.gameObject.name.Contains("MultiplierBoost"))
             {
@@ -109,11 +111,9 @@ public class PlayerMovement : MonoBehaviour
             Shoot();
             elapsed += 0.5f; // Shoot every 0.5 seconds
             yield return new WaitForSeconds(0.5f);
-            _buffDurationUI.UpdateShootingBuffBar(shootDuration-elapsed);
         }
 
         isShooting = false;
-        _buffDurationUI.UpdateShootingBuffBar(0);
     }
 
     void Shoot()
@@ -139,7 +139,6 @@ public class PlayerMovement : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             yield return null;
-            _buffDurationUI.UpdateSpeedBoostBar(speedBoostDuration-elapsed);
         }
 
         activeSpeedBoosts--;
@@ -150,7 +149,6 @@ public class PlayerMovement : MonoBehaviour
             shipCollider.isTrigger = false;
             isSpeedBoosted = false;
             scoreManager.SetSpeedBoostMultiplier(currentMultiplier);
-            _buffDurationUI.UpdateSpeedBoostBar(0);
         }
     }
 
