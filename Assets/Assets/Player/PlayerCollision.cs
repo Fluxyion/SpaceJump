@@ -41,7 +41,7 @@ public class PlayerCollision : MonoBehaviour
         { 
             DestroyRoadblockCrashParticle.Play();
             Destroy(collision.gameObject);
-            scoreManager.AddScore(destroyRoadblockScoreValue);
+            scoreManager.AddScore(destroyRoadblockScoreValue*scoreManager.speedBoostMultiplier);
             
         }
     }

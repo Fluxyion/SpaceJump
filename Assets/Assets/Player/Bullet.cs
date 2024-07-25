@@ -3,7 +3,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public int shootRoadblockScoreValue=5;
-    public float speed = 20f;
+    public float speed = 80f;
     public float lifetime = 2f;
     private ScoreManager _scoreManager;
     [SerializeField]private ParticleSystem shootRoadblockParticle;
@@ -27,7 +27,7 @@ public class Bullet : MonoBehaviour
             PlayParticleEffect();
             Destroy(other.gameObject);
             Destroy(gameObject);
-            _scoreManager.AddScore(shootRoadblockScoreValue);
+            _scoreManager.AddScore(shootRoadblockScoreValue*_scoreManager.speedBoostMultiplier);
         }
     }
     private void PlayParticleEffect()

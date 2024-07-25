@@ -13,15 +13,20 @@ public class PlayerMovement : MonoBehaviour
     public GameObject bulletPrefab;
     public float shootDuration = 5f; 
     public float speedBoostDuration = 5f; 
-    public float speedBoostMultiplier = 2f;
+    public int speedBoostMultiplier = 2;
     [SerializeField]private ParticleSystem speedBoostParticles;
     private MeshCollider shipCollider;
+    private int speedBoostMultiplierCount=0;
     
 
     private Rigidbody rb;
     public bool isShooting = false;
     public bool isSpeedBoosted = false;
     private float originalSpeed;
+    public int activeSpeedBoosts = 0;
+    private ScoreManager scoreManager;
+    private int currentMultiplier;
+    private BuffDurationUI _buffDurationUI;
     
 
     void Start()
@@ -29,6 +34,12 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         originalSpeed = forwardSpeed;
         shipCollider = GetComponent<MeshCollider>();
+        scoreManager = FindObjectOfType<ScoreManager>();
+        _buffDurationUI = FindObjectOfType<BuffDurationUI>();
+        
+        currentMultiplier = 1;
+        _buffDurationUI.SetShootingBuffDuration(shootDuration);
+        _buffDurationUI.SetSpeedBoostDuration(speedBoostDuration);
     }
 
     void Update()
@@ -50,6 +61,10 @@ public class PlayerMovement : MonoBehaviour
         Vector3 clampedPosition = transform.position;
         clampedPosition.y = Mathf.Clamp(clampedPosition.y, minHeight, maxHeight);
         transform.position = clampedPosition;
+        if (!isSpeedBoosted)
+        {
+            originalSpeed = forwardSpeed;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -67,6 +82,18 @@ public class PlayerMovement : MonoBehaviour
                 StartCoroutine(SpeedBoostCoroutine());
                 speedBoostParticles.Play();
             }
+            else if (other.gameObject.name.Contains("MultiplierBoost"))
+            {
+                currentMultiplier++;
+                if (!isSpeedBoosted)
+                {
+                    scoreManager.SetSpeedBoostMultiplier(currentMultiplier);
+                }
+                else
+                {
+                    scoreManager.SetSpeedBoostMultiplier(currentMultiplier*speedBoostMultiplierCount*speedBoostMultiplier);
+                }
+            }
 
             Destroy(other.gameObject);
         }
@@ -82,9 +109,11 @@ public class PlayerMovement : MonoBehaviour
             Shoot();
             elapsed += 0.5f; // Shoot every 0.5 seconds
             yield return new WaitForSeconds(0.5f);
+            _buffDurationUI.UpdateShootingBuffBar(shootDuration-elapsed);
         }
 
         isShooting = false;
+        _buffDurationUI.UpdateShootingBuffBar(0);
     }
 
     void Shoot()
@@ -98,21 +127,31 @@ public class PlayerMovement : MonoBehaviour
 
     IEnumerator SpeedBoostCoroutine()
     {
+        activeSpeedBoosts++;
+        speedBoostMultiplierCount++;
         isSpeedBoosted = true;
-        originalSpeed = forwardSpeed;
         shipCollider.isTrigger = true;
         forwardSpeed *= speedBoostMultiplier;
+        scoreManager.SetSpeedBoostMultiplier(speedBoostMultiplier*speedBoostMultiplierCount*currentMultiplier);
         float elapsed = 0f;
 
         while (elapsed < speedBoostDuration)
         {
             elapsed += Time.deltaTime;
             yield return null;
+            _buffDurationUI.UpdateSpeedBoostBar(speedBoostDuration-elapsed);
         }
 
-        forwardSpeed = originalSpeed;
-        isSpeedBoosted = false;
-        shipCollider.isTrigger = false;
+        activeSpeedBoosts--;
+        if (activeSpeedBoosts == 0)
+        {
+            speedBoostMultiplierCount = 0;
+            forwardSpeed = originalSpeed;
+            shipCollider.isTrigger = false;
+            isSpeedBoosted = false;
+            scoreManager.SetSpeedBoostMultiplier(currentMultiplier);
+            _buffDurationUI.UpdateSpeedBoostBar(0);
+        }
     }
-    
+
 }

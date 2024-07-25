@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 306462338203046310}
   - component: {fileID: 7543196186612229203}
   m_Layer: 0
-  m_Name: CollectiblePoint
+  m_Name: MultiplierBoost
   m_TagString: Collectible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -11,8 +11,10 @@ public class ScoreManager : MonoBehaviour
     public static int score; // Player's score
     [SerializeField]public TextMeshProUGUI scoreText;
     [SerializeField]public TextMeshProUGUI highScoreText;
+    [SerializeField] private TextMeshProUGUI scoreMultiplierText;
     public int highScore;
-
+    public int speedBoostMultiplier = 1;
+    
     void Start()
     {
         score = 0;
@@ -29,10 +31,11 @@ public class ScoreManager : MonoBehaviour
         while (SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(1))
         {
             yield return new WaitForSeconds(1f);
-            score++;
+            score += Mathf.RoundToInt(1 * speedBoostMultiplier);
+            scoreMultiplierText.text = speedBoostMultiplier + "X";
             if (score > PlayerPrefs.GetInt("HighScore", 0))
             {
-                PlayerPrefs.SetInt("HighScore",score);
+                PlayerPrefs.SetInt("HighScore", score);
             }
             UpdateScoreUI();
         }
@@ -60,5 +63,14 @@ public class ScoreManager : MonoBehaviour
         {
             highScoreText.text = "High Score:" + highScore;
         }
+    }
+    public void SetSpeedBoostMultiplier(int multiplier)
+    {
+        speedBoostMultiplier = multiplier;
+    }
+
+    public void ResetSpeedBoostMultiplier()
+    {
+        speedBoostMultiplier = 1; // Reset to default multiplier
     }
 }
