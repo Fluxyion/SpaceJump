@@ -14,7 +14,12 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreMultiplierText;
     public int highScore;
     public int speedBoostMultiplier = 1;
-    
+
+    private void Awake()
+    {
+        Application.targetFrameRate = Screen.currentResolution.refreshRate;
+    }
+
     void Start()
     {
         score = 0;
