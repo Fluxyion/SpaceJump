@@ -57,7 +57,7 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         forwardSpeed = Mathf.Min(forwardSpeed + acceleration * Time.fixedDeltaTime, maxForwardSpeed);
-        rb.velocity = new Vector3(forwardSpeed, rb.velocity.y, rb.velocity.z);
+        rb.velocity = new Vector3(forwardSpeed, rb.velocity.y, 0);
         Vector3 clampedPosition = transform.position;
         clampedPosition.y = Mathf.Clamp(clampedPosition.y, minHeight, maxHeight);
         transform.position = clampedPosition;
